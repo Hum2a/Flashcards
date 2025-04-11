@@ -1,0 +1,176 @@
+/* Animation Keyframes */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-dialog {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.settings-dialog .MuiDialog-paper {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+.settings-content {
+  padding: 32px;
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+}
+
+.settings-close-button {
+  position: absolute !important;
+  right: 16px;
+  top: 16px;
+  color: rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-close-button:hover {
+  color: rgba(0, 0, 0, 0.9);
+  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.settings-title {
+  font-weight: 700;
+  margin-bottom: 32px;
+  background: linear-gradient(45deg, #1976d2, #2196f3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2rem !important;
+}
+
+.settings-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1976d2;
+  font-weight: 600;
+  margin-bottom: 16px !important;
+}
+
+.settings-section-title .MuiSvgIcon-root {
+  font-size: 1.5rem;
+}
+
+.settings-divider {
+  margin-bottom: 24px !important;
+  background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.2), transparent) !important;
+  height: 2px !important;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 8px;
+}
+
+.settings-control {
+  animation: slideIn 0.3s ease-out;
+}
+
+.settings-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-label .MuiSvgIcon-root {
+  font-size: 1.2rem;
+  color: #1976d2;
+}
+
+/* Style Material-UI components */
+.settings-dialog .MuiSwitch-root {
+  margin-right: 8px;
+}
+
+.settings-dialog .MuiSwitch-switchBase.Mui-checked {
+  color: #1976d2;
+}
+
+.settings-dialog .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: rgba(25, 118, 210, 0.5);
+}
+
+.settings-dialog .MuiSlider-root {
+  color: #1976d2;
+}
+
+.settings-dialog .MuiSelect-root {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.settings-cancel-button {
+  color: #666 !important;
+  border-color: #666 !important;
+  transition: all 0.3s ease !important;
+}
+
+.settings-cancel-button:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  transform: translateY(-2px);
+}
+
+.settings-save-button {
+  background: linear-gradient(45deg, #1976d2, #2196f3) !important;
+  color: white !important;
+  padding: 8px 24px !important;
+  transition: all 0.3s ease !important;
+}
+
+.settings-save-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .settings-content {
+    padding: 24px 16px;
+  }
+
+  .settings-title {
+    font-size: 1.75rem !important;
+  }
+
+  .settings-section {
+    gap: 16px;
+  }
+
+  .settings-actions {
+    flex-direction: column-reverse;
+  }
+
+  .settings-cancel-button,
+  .settings-save-button {
+    width: 100%;
+  }
+} 

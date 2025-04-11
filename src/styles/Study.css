@@ -1,0 +1,113 @@
+.study-container {
+  padding: 2rem;
+  padding-top: calc(var(--navbar-height) + 2rem);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.study-header-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.study-header-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.study-flashcard {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+  margin: 2rem 0;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.study-card-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.study-card-text {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.study-flip-button {
+  background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%) !important;
+  color: white !important;
+  padding: 0.8rem 2rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.study-flip-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.study-navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 0 1rem;
+}
+
+.study-nav-button {
+  background: white !important;
+  color: #2c3e50 !important;
+  padding: 0.8rem 2rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.study-nav-button:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.study-nav-button:disabled {
+  background: #f0f0f0 !important;
+  color: #bdc3c7 !important;
+}
+
+.study-progress-text {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .study-container {
+    padding: 1rem;
+    padding-top: calc(var(--navbar-height) + 1rem);
+  }
+
+  .study-header-title {
+    font-size: 2rem;
+  }
+
+  .study-card-text {
+    font-size: 1.5rem;
+  }
+
+  .study-nav-button {
+    padding: 0.6rem 1.5rem !important;
+  }
+} 

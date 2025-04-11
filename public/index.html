@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Flashcards - A modern flashcard app for effective learning"
+    />
+    <meta name="keywords" content="flashcards, learning, study, education, spaced repetition, memory" />
+    <meta name="author" content="Flashcards Team" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="Flashcards" />
+    <meta property="og:description" content="A modern flashcard app for effective learning" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://flashcards.app" />
+    <meta property="og:image" content="%PUBLIC_URL%/logo.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Flashcards" />
+    <meta name="twitter:description" content="A modern flashcard app for effective learning" />
+    <meta name="twitter:image" content="%PUBLIC_URL%/logo.svg" />
+    
+    <!-- Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/logo.svg">
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.svg">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="mask-icon" href="%PUBLIC_URL%/logo.svg" color="#ffcc00">
+    <meta name="msapplication-TileColor" content="#ffcc00">
+    <meta name="theme-color" content="#ffcc00">
+    
+    <!-- PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Flashcards">
+    
+    <!-- Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
+    <title>Flashcards</title>
+  </head>
+  <body>
+    <noscript>
+      <div style="text-align: center; padding: 20px;">
+        <h1>JavaScript Required</h1>
+        <p>You need to enable JavaScript to run this app. Please enable JavaScript in your browser settings.</p>
+      </div>
+    </noscript>
+    <div id="root"></div>
+    
+    <!-- Loading State -->
+    <div id="loading" style="display: none;">
+      <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- Error Boundary Fallback -->
+    <div id="error-boundary" style="display: none;">
+      <div class="error-message">
+        <h2>Something went wrong</h2>
+        <p>We're sorry, but there was an error loading the application.</p>
+        <button onclick="window.location.reload()">Try Again</button>
+      </div>
+    </div>
+  </body>
+</html>
