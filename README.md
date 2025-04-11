@@ -1,70 +1,175 @@
-# Getting Started with Create React App
+# 🎴 Flashcards - Study Smarter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
 
-## Available Scripts
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![Material-UI](https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)](https://mui.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 
-In the project directory, you can run:
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/your-badge-id/deploy-status)](https://app.netlify.com/sites/your-site-name/deploys)
 
-### `npm start`
+</div>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📝 Table of Contents
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- [✨ Features](#-features)
+- [🚀 Getting Started](#-getting-started)
+- [🛠️ Installation](#%EF%B8%8F-installation)
+- [⚙️ Configuration](#%EF%B8%8F-configuration)
+- [📱 Usage](#-usage)
+- [🧪 Testing](#-testing)
+- [🏗️ Project Structure](#%EF%B8%8F-project-structure)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [👥 Authors](#-authors)
+- [🙏 Acknowledgments](#-acknowledgments)
 
-### `npm test`
+## ✨ Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<div align="center">
 
-### `npm run build`
+| Feature | Description |
+|---------|-------------|
+| 🎨 Modern UI | Beautiful, responsive design with Material-UI |
+| 📱 PWA Support | Installable on any device |
+| 🔄 Real-time Sync | Instant updates across devices |
+| 📊 Progress Tracking | Monitor your learning journey |
+| 🎯 Spaced Repetition | Optimized learning algorithm |
+| 🔍 Search & Filter | Find cards quickly |
+| 🌙 Dark Mode | Eye-friendly study sessions |
+| 📤 Import/Export | Share decks with others |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+</div>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
 
-### `npm run eject`
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+- Git
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 🛠️ Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/flashcards.git
+   cd flashcards
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-## Learn More
+4. **Start the development server**
+   ```bash
+   npm start
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## ⚙️ Configuration
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Environment Variables
 
-### Code Splitting
+Create a `.env` file in the root directory with the following variables:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```env
+REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_FIREBASE_API_KEY=your-api-key
+# ... (see .env.example for all variables)
+```
 
-### Analyzing the Bundle Size
+## 📱 Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Development
 
-### Making a Progressive Web App
+```bash
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Production Build
 
-### Advanced Configuration
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Testing
 
-### Deployment
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🧪 Testing
 
-### `npm run build` fails to minify
+We use Jest and React Testing Library for our tests. Run the test suite with:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm test
+```
+
+For coverage reports:
+
+```bash
+npm run test:coverage
+```
+
+## 🏗️ Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── pages/         # Page components
+├── styles/        # CSS and styling files
+├── utils/         # Utility functions
+├── hooks/         # Custom React hooks
+├── context/       # React context providers
+├── services/      # API and service integrations
+└── assets/        # Static assets
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## 👥 Authors
+
+- **Your Name** - *Initial work* - [YourGitHub](https://github.com/your-username)
+
+See also the list of [contributors](https://github.com/your-username/flashcards/contributors) who participated in this project.
+
+## 🙏 Acknowledgments
+
+- [Create React App](https://github.com/facebook/create-react-app)
+- [Material-UI](https://mui.com/)
+- [Firebase](https://firebase.google.com/)
+- [React Router](https://reactrouter.com/)
+
+---
+
+<div align="center">
+
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-git.svg)](https://forthebadge.com)
+
+</div>
