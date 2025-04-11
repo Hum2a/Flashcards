@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Button,
@@ -8,7 +8,8 @@ import {
   Tab,
   Tabs,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Fade
 } from '@mui/material';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase';
@@ -25,6 +26,7 @@ function AuthPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState('');
+  const [activeTab, setActiveTab] = useState(0);
 
   const createUserProfile = async (user) => {
     try {
@@ -98,102 +100,133 @@ function AuthPage() {
 
   return (
     <div className="auth-container">
-      <Paper elevation={3} className="auth-paper">
-        <Typography variant="h4" className="auth-title">
-          Welcome to FlashCards
-        </Typography>
-        <Typography variant="subtitle1" className="auth-subtitle">
-          Your personal learning companion
-        </Typography>
-
-        <Tabs
-          value={isLogin ? 0 : 1}
-          onChange={(_, newValue) => {
-            setIsLogin(newValue === 0);
-            setError('');
-          }}
-          className="auth-tabs"
-        >
-          <Tab label="Login" />
-          <Tab label="Register" />
-        </Tabs>
-
-        {error && (
-          <Alert severity="error" className="auth-alert">
-            {error}
-          </Alert>
-        )}
-
-        <Box component="form" onSubmit={handleSubmit} className="auth-form">
-          <TextField
-            fullWidth
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="auth-input"
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="auth-input"
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={loading}
-            className="auth-button"
-          >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              isLogin ? 'Login' : 'Register'
-            )}
-          </Button>
-        </Box>
-
-        <div className="auth-divider">
-          <span>OR</span>
+      {/* Animated Background Elements */}
+      <div className="auth-background">
+        <div className="floating-cards">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="floating-card" style={{ '--delay': `${i * 2}s` }} />
+          ))}
         </div>
+        <div className="gradient-overlay" />
+      </div>
 
-        <div className="social-buttons">
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={() => handleSocialSignIn('google')}
-            startIcon={socialLoading === 'google' ? (
-              <CircularProgress size={20} />
-            ) : (
-              <GoogleIcon />
-            )}
-            disabled={!!socialLoading}
-            className="google-button"
-          >
-            Continue with Google
-          </Button>
+      <Fade in={true} timeout={800}>
+        <Paper elevation={3} className="auth-paper">
+          <div className="auth-header">
+            <img 
+              src="/logo.svg" 
+              alt="Flashcards Logo" 
+              className="auth-logo"
+            />
+            <Typography variant="h4" className="auth-title">
+              Welcome to FlashCards
+            </Typography>
+            <Typography variant="subtitle1" className="auth-subtitle">
+              Your personal learning companion
+            </Typography>
+          </div>
 
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={() => handleSocialSignIn('apple')}
-            startIcon={socialLoading === 'apple' ? (
-              <CircularProgress size={20} />
-            ) : (
-              <AppleIcon />
-            )}
-            disabled={!!socialLoading}
-            className="apple-button"
+          <Tabs
+            value={activeTab}
+            onChange={(_, newValue) => {
+              setActiveTab(newValue);
+              setIsLogin(newValue === 0);
+              setError('');
+            }}
+            className="auth-tabs"
+            TabIndicatorProps={{
+              className: 'tab-indicator'
+            }}
           >
-            Continue with Apple
-          </Button>
-        </div>
-      </Paper>
+            <Tab label="Login" className="auth-tab" />
+            <Tab label="Register" className="auth-tab" />
+          </Tabs>
+
+          {error && (
+            <Alert severity="error" className="auth-alert">
+              {error}
+            </Alert>
+          )}
+
+          <Box component="form" onSubmit={handleSubmit} className="auth-form">
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="auth-input"
+              variant="outlined"
+              InputProps={{
+                className: 'auth-input-field'
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="auth-input"
+              variant="outlined"
+              InputProps={{
+                className: 'auth-input-field'
+              }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={loading}
+              className="auth-button"
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                isLogin ? 'Login' : 'Register'
+              )}
+            </Button>
+          </Box>
+
+          <div className="auth-divider">
+            <span>OR</span>
+          </div>
+
+          <div className="social-buttons">
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleSocialSignIn('google')}
+              startIcon={socialLoading === 'google' ? (
+                <CircularProgress size={20} />
+              ) : (
+                <GoogleIcon />
+              )}
+              disabled={!!socialLoading}
+              className="google-button"
+            >
+              Continue with Google
+            </Button>
+
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleSocialSignIn('apple')}
+              startIcon={socialLoading === 'apple' ? (
+                <CircularProgress size={20} />
+              ) : (
+                <AppleIcon />
+              )}
+              disabled={!!socialLoading}
+              className="apple-button"
+            >
+              Continue with Apple
+            </Button>
+          </div>
+        </Paper>
+      </Fade>
     </div>
   );
 }
