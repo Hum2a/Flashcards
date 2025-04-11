@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import CreateDeck from './pages/CreateDeck';
 import Study from './pages/Study';
+import EditDeck from './pages/EditDeck';
 import AuthPage from './pages/AuthPage';
 import { useAuth } from './context/AuthContext';
 
@@ -40,6 +41,14 @@ function Navigation() {
               <>
                 <Navbar />
                 <Study />
+              </>
+            </PrivateRoute>
+          } />
+          <Route path="/edit/:deckId" element={
+            <PrivateRoute>
+              <>
+                <Navbar />
+                <EditDeck />
               </>
             </PrivateRoute>
           } />

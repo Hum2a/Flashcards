@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Box, Fade, Grow } from '@mui/material';
+import { Typography, Button, Box, Fade, Grow, IconButton } from '@mui/material';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AddIcon from '@mui/icons-material/Add';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
+import EditIcon from '@mui/icons-material/Edit';
 import '../styles/Home.css';
 
 function Home() {
@@ -120,13 +121,22 @@ function Home() {
                           {deck.createdAt ? new Date(deck.createdAt).toLocaleDateString() : 'Recently'}
                         </Typography>
                       </div>
-                      <Button
-                        component={RouterLink}
-                        to={`/study/${deck.id}`}
-                        className="home-study-button"
-                      >
-                        Start Studying
-                      </Button>
+                      <div className="home-deck-actions">
+                        <Button
+                          component={RouterLink}
+                          to={`/study/${deck.id}`}
+                          className="home-study-button"
+                        >
+                          Start Studying
+                        </Button>
+                        <IconButton
+                          component={RouterLink}
+                          to={`/edit/${deck.id}`}
+                          className="home-edit-button"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </div>
                     </div>
                   </div>
                 </Grow>
