@@ -1,19 +1,44 @@
-import React, { useState } from 'react';
-import { TextField, Typography, Button, Box, Fade, Grow } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { TextField, Typography, Button, Box, Fade, Grow, IconButton, Avatar } from '@mui/material';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import '../styles/CreateDeck.css';
 
 function CreateDeck() {
   const [title, setTitle] = useState('');
   const [cards, setCards] = useState([{ front: '', back: '' }]);
   const [loading, setLoading] = useState(false);
+  const [deckImage, setDeckImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.match('image.*')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size should be less than 5MB');
+        return;
+      }
+
+      setDeckImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleAddCard = () => {
     setCards([...cards, { front: '', back: '' }]);
@@ -45,12 +70,22 @@ function CreateDeck() {
 
     setLoading(true);
     try {
+      let imageUrl = null;
+      
+      // Upload image if selected
+      if (deckImage) {
+        const imageRef = ref(storage, `deck-images/${currentUser.uid}/${Date.now()}-${deckImage.name}`);
+        await uploadBytes(imageRef, deckImage);
+        imageUrl = await getDownloadURL(imageRef);
+      }
+
       const deckRef = await addDoc(collection(db, 'users', currentUser.uid, 'flashcards'), {
         title: title.trim(),
         cards: cards.map(card => ({
           front: card.front.trim(),
           back: card.back.trim()
         })),
+        imageUrl,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
@@ -75,11 +110,25 @@ function CreateDeck() {
       <Fade in={true} timeout={800}>
         <div className="createdeck-content">
           <div className="createdeck-header-section">
-            <img 
-              src="/logo.svg" 
-              alt="Flashcards Logo" 
-              className="createdeck-logo"
-            />
+            <div className="createdeck-image-upload">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+              />
+              <Avatar
+                src={imagePreview}
+                className="createdeck-avatar"
+                onClick={() => fileInputRef.current.click()}
+              >
+                <AddPhotoAlternateIcon />
+              </Avatar>
+              <Typography className="createdeck-image-text">
+                {imagePreview ? 'Change Deck Image' : 'Add Deck Image'}
+              </Typography>
+            </div>
             <Typography className="createdeck-header-title">
               Create New Deck
             </Typography>

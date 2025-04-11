@@ -275,4 +275,42 @@
     width: 100px;
     height: 60px;
   }
+}
+
+.createdeck-image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.createdeck-image-upload:hover {
+  transform: scale(1.05);
+}
+
+.createdeck-avatar {
+  width: 120px !important;
+  height: 120px !important;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #1976d2, #2196f3) !important;
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.2);
+  transition: all 0.3s ease !important;
+}
+
+.createdeck-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.3);
+}
+
+.createdeck-image-text {
+  color: #7f8c8d !important;
+  font-size: 1rem !important;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.createdeck-image-upload:hover .createdeck-image-text {
+  color: #1976d2 !important;
 } 
