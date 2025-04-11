@@ -106,6 +106,16 @@ function Home() {
                   key={deck.id}
                 >
                   <div className="home-deck-card">
+                    {deck.imageUrl && (
+                      <div className="home-deck-image-container">
+                        <img 
+                          src={deck.imageUrl} 
+                          alt={deck.title}
+                          className="home-deck-image"
+                        />
+                        <div className="home-deck-image-overlay" />
+                      </div>
+                    )}
                     <div className="home-deck-content">
                       <Typography className="home-deck-title">
                         {deck.title}

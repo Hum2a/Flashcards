@@ -152,6 +152,35 @@
   transition: all 0.3s ease;
   overflow: hidden;
   transform: translateY(0);
+  position: relative;
+}
+
+.home-deck-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.home-deck-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.home-deck-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, 
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  pointer-events: none;
 }
 
 .home-deck-card:hover {
@@ -159,8 +188,14 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
+.home-deck-card:hover .home-deck-image {
+  transform: scale(1.05);
+}
+
 .home-deck-content {
   padding: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .home-deck-title {
@@ -293,5 +328,9 @@
   .floating-card {
     width: 100px;
     height: 60px;
+  }
+
+  .home-deck-image-container {
+    height: 160px;
   }
 } 

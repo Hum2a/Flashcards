@@ -147,6 +147,16 @@ function Study() {
       <div className="study-content">
         <Fade in={true} timeout={800}>
           <div className="study-header-section">
+            {deck.imageUrl && (
+              <div className="study-deck-image-container">
+                <img 
+                  src={deck.imageUrl} 
+                  alt={deck.title} 
+                  className="study-deck-image"
+                />
+                <div className="study-deck-image-overlay" />
+              </div>
+            )}
             <Typography className="study-header-title">
               {deck.title}
             </Typography>

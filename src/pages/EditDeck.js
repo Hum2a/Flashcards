@@ -25,6 +25,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import '../styles/EditDeck.css';
+import { useAlert } from '../context/AlertContext';
 
 function EditDeck() {
   const { deckId } = useParams();
@@ -36,6 +37,7 @@ function EditDeck() {
   const [deckImage, setDeckImage] = useState(null);
   const [existingImageUrl, setExistingImageUrl] = useState(null);
   const [showContent, setShowContent] = useState(false);
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     const fetchDeck = async () => {
@@ -51,7 +53,11 @@ function EditDeck() {
         }
       } catch (error) {
         console.error('Error fetching deck:', error);
-        alert('Failed to load deck. Please try again.');
+        showAlert({
+          title: 'Error',
+          message: 'Failed to load deck. Please try again.',
+          type: 'error'
+        });
       } finally {
         setLoading(false);
         setTimeout(() => setShowContent(true), 300);
@@ -61,7 +67,7 @@ function EditDeck() {
     if (currentUser) {
       fetchDeck();
     }
-  }, [deckId, currentUser]);
+  }, [deckId, currentUser, showAlert]);
 
   const handleAddCard = () => {
     setCards([...cards, { front: '', back: '' }]);
@@ -84,10 +90,32 @@ function EditDeck() {
     }
   };
 
+  const handleRemoveImage = async () => {
+    try {
+      if (existingImageUrl) {
+        const imageRef = ref(storage, existingImageUrl);
+        await deleteObject(imageRef);
+      }
+      setExistingImageUrl(null);
+      setDeckImage(null);
+    } catch (error) {
+      console.error('Error removing image:', error);
+      showAlert({
+        title: 'Error',
+        message: 'Failed to remove image. Please try again.',
+        type: 'error'
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || cards.some(card => !card.front.trim() || !card.back.trim())) {
-      alert('Please fill in all required fields');
+      showAlert({
+        title: 'Validation Error',
+        message: 'Please fill in all required fields',
+        type: 'warning'
+      });
       return;
     }
 
@@ -95,22 +123,24 @@ function EditDeck() {
     try {
       let imageUrl = existingImageUrl;
       
-      // Handle image upload if new image is selected
       if (deckImage) {
         try {
-          // Delete old image if it exists
           if (existingImageUrl) {
             const oldImageRef = ref(storage, existingImageUrl);
             await deleteObject(oldImageRef);
           }
 
-          // Upload new image
           const imageRef = ref(storage, `deck-images/${currentUser.uid}/${Date.now()}-${deckImage.name}`);
           await uploadBytes(imageRef, deckImage);
           imageUrl = await getDownloadURL(imageRef);
         } catch (error) {
           console.error('Error handling image:', error);
-          alert('Failed to update image. The deck will be updated without image changes.');
+          showAlert({
+            title: 'Image Upload Error',
+            message: 'Failed to update image. The deck will be updated without image changes.',
+            type: 'warning'
+          });
+          imageUrl = null;
         }
       }
 
@@ -127,33 +157,45 @@ function EditDeck() {
       navigate('/');
     } catch (error) {
       console.error('Error updating deck:', error);
-      alert('Failed to update deck. Please try again.');
+      showAlert({
+        title: 'Error',
+        message: error.message || 'Failed to update deck. Please try again.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this deck? This action cannot be undone.')) {
-      setLoading(true);
-      try {
-        // Delete image if it exists
-        if (existingImageUrl) {
-          const imageRef = ref(storage, existingImageUrl);
-          await deleteObject(imageRef);
-        }
+    showAlert({
+      title: 'Delete Deck',
+      message: 'Are you sure you want to delete this deck? This action cannot be undone.',
+      type: 'warning',
+      confirmText: 'Delete',
+      onConfirm: async () => {
+        setLoading(true);
+        try {
+          if (existingImageUrl) {
+            const imageRef = ref(storage, existingImageUrl);
+            await deleteObject(imageRef);
+          }
 
-        // Delete deck document
-        const deckRef = doc(db, 'users', currentUser.uid, 'flashcards', deckId);
-        await deleteDoc(deckRef);
-        navigate('/');
-      } catch (error) {
-        console.error('Error deleting deck:', error);
-        alert('Failed to delete deck. Please try again.');
-      } finally {
-        setLoading(false);
+          const deckRef = doc(db, 'users', currentUser.uid, 'flashcards', deckId);
+          await deleteDoc(deckRef);
+          navigate('/');
+        } catch (error) {
+          console.error('Error deleting deck:', error);
+          showAlert({
+            title: 'Error',
+            message: 'Failed to delete deck. Please try again.',
+            type: 'error'
+          });
+        } finally {
+          setLoading(false);
+        }
       }
-    }
+    });
   };
 
   if (loading) {
@@ -200,28 +242,53 @@ function EditDeck() {
               className="editdeck-input-field"
             />
 
-            <div className="editdeck-image-upload">
-              <input
-                accept="image/*"
-                type="file"
-                id="deck-image-upload"
-                onChange={handleImageChange}
-                style={{ display: 'none' }}
-              />
-              <label htmlFor="deck-image-upload">
-                <Button
-                  variant="outlined"
-                  component="span"
-                  className="editdeck-upload-button"
-                >
-                  {existingImageUrl ? 'Change Deck Image' : 'Add Deck Image'}
-                </Button>
-              </label>
-              {deckImage && (
-                <Typography className="editdeck-image-name">
-                  Selected: {deckImage.name}
-                </Typography>
-              )}
+            <div className="editdeck-image-section">
+              <Typography className="editdeck-image-label">Deck Image</Typography>
+              <div className="editdeck-image-preview">
+                {existingImageUrl && (
+                  <div className="editdeck-image-container">
+                    <img 
+                      src={existingImageUrl} 
+                      alt="Deck preview" 
+                      className="editdeck-preview-image"
+                    />
+                    <div className="editdeck-image-overlay" />
+                  </div>
+                )}
+                <div className="editdeck-image-actions">
+                  <input
+                    accept="image/*"
+                    type="file"
+                    id="deck-image-upload"
+                    onChange={handleImageChange}
+                    style={{ display: 'none' }}
+                  />
+                  <label htmlFor="deck-image-upload">
+                    <Button
+                      variant="outlined"
+                      component="span"
+                      className="editdeck-upload-button"
+                    >
+                      {existingImageUrl ? 'Change Image' : 'Add Image'}
+                    </Button>
+                  </label>
+                  {existingImageUrl && (
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={handleRemoveImage}
+                      className="editdeck-remove-image-button"
+                    >
+                      Remove Image
+                    </Button>
+                  )}
+                </div>
+                {deckImage && (
+                  <Typography className="editdeck-image-name">
+                    Selected: {deckImage.name}
+                  </Typography>
+                )}
+              </div>
             </div>
 
             <div className="editdeck-cards-container">
