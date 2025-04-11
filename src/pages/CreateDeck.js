@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Typography, Button, Box } from '@mui/material';
+import { TextField, Typography, Button, Box, Fade, Grow } from '@mui/material';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
@@ -63,83 +63,114 @@ function CreateDeck() {
 
   return (
     <div className="createdeck-container">
-      <div className="createdeck-header-section">
-        <Typography className="createdeck-header-title">
-          Create New Deck
-        </Typography>
-        <Typography className="createdeck-header-subtitle">
-          Build your knowledge one card at a time
-        </Typography>
+      <div className="createdeck-background">
+        <div className="floating-cards">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="floating-card" style={{ '--delay': `${i * 2}s` }} />
+          ))}
+        </div>
+        <div className="gradient-overlay" />
       </div>
 
-      <Box component="form" onSubmit={handleSubmit} className="createdeck-form">
-        <TextField
-          fullWidth
-          label="Deck Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="createdeck-title-input"
-          required
-          variant="outlined"
-        />
-
-        {cards.map((card, index) => (
-          <div key={index} className="createdeck-card-container">
-            <div className="createdeck-card-header">
-              <Typography className="createdeck-card-number">
-                Card {index + 1}
-              </Typography>
-              {cards.length > 1 && (
-                <DeleteIcon
-                  className="createdeck-remove-card"
-                  onClick={() => handleRemoveCard(index)}
-                />
-              )}
-            </div>
-            <TextField
-              fullWidth
-              label="Front"
-              value={card.front}
-              onChange={(e) => handleCardChange(index, 'front', e.target.value)}
-              className="createdeck-card-input"
-              required
-              multiline
-              rows={2}
-              variant="outlined"
+      <Fade in={true} timeout={800}>
+        <div className="createdeck-content">
+          <div className="createdeck-header-section">
+            <img 
+              src="/logo.svg" 
+              alt="Flashcards Logo" 
+              className="createdeck-logo"
             />
-            <TextField
-              fullWidth
-              label="Back"
-              value={card.back}
-              onChange={(e) => handleCardChange(index, 'back', e.target.value)}
-              className="createdeck-card-input"
-              required
-              multiline
-              rows={2}
-              variant="outlined"
-            />
+            <Typography className="createdeck-header-title">
+              Create New Deck
+            </Typography>
+            <Typography className="createdeck-header-subtitle">
+              Build your knowledge one card at a time
+            </Typography>
           </div>
-        ))}
 
-        <div className="createdeck-action-buttons">
-          <Button
-            variant="contained"
-            onClick={handleAddCard}
-            className="createdeck-add-card-button"
-            startIcon={<AddIcon />}
-          >
-            Add Card
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            className="createdeck-create-button"
-            disabled={loading}
-          >
-            {loading ? 'Creating...' : 'Create Deck'}
-          </Button>
+          <Box component="form" onSubmit={handleSubmit} className="createdeck-form">
+            <TextField
+              fullWidth
+              label="Deck Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="createdeck-title-input"
+              required
+              variant="outlined"
+              InputProps={{
+                className: 'createdeck-input-field'
+              }}
+            />
+
+            <div className="createdeck-cards-container">
+              {cards.map((card, index) => (
+                <Grow in={true} timeout={500} key={index} style={{ transitionDelay: `${index * 100}ms` }}>
+                  <div className="createdeck-card-container">
+                    <div className="createdeck-card-header">
+                      <Typography className="createdeck-card-number">
+                        Card {index + 1}
+                      </Typography>
+                      {cards.length > 1 && (
+                        <DeleteIcon
+                          className="createdeck-remove-card"
+                          onClick={() => handleRemoveCard(index)}
+                        />
+                      )}
+                    </div>
+                    <TextField
+                      fullWidth
+                      label="Front"
+                      value={card.front}
+                      onChange={(e) => handleCardChange(index, 'front', e.target.value)}
+                      className="createdeck-card-input"
+                      required
+                      multiline
+                      rows={2}
+                      variant="outlined"
+                      InputProps={{
+                        className: 'createdeck-input-field'
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Back"
+                      value={card.back}
+                      onChange={(e) => handleCardChange(index, 'back', e.target.value)}
+                      className="createdeck-card-input"
+                      required
+                      multiline
+                      rows={2}
+                      variant="outlined"
+                      InputProps={{
+                        className: 'createdeck-input-field'
+                      }}
+                    />
+                  </div>
+                </Grow>
+              ))}
+            </div>
+
+            <div className="createdeck-action-buttons">
+              <Button
+                variant="contained"
+                onClick={handleAddCard}
+                className="createdeck-add-card-button"
+                startIcon={<AddIcon />}
+              >
+                Add Card
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                className="createdeck-create-button"
+                disabled={loading}
+              >
+                {loading ? 'Creating...' : 'Create Deck'}
+              </Button>
+            </div>
+          </Box>
         </div>
-      </Box>
+      </Fade>
     </div>
   );
 }

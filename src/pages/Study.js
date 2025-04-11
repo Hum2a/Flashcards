@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Box } from '@mui/material';
+import { Typography, Button, Box, Fade, Grow, Zoom } from '@mui/material';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ function Study() {
   const [showBack, setShowBack] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isFlipping, setIsFlipping] = useState(false);
 
   useEffect(() => {
     const fetchDeck = async () => {
@@ -59,13 +60,19 @@ function Study() {
     }
   };
 
+  const handleFlip = () => {
+    setIsFlipping(true);
+    setShowBack(!showBack);
+    setTimeout(() => setIsFlipping(false), 300);
+  };
+
   const handleKeyPress = (event) => {
     if (event.key === 'ArrowRight') {
       handleNextCard();
     } else if (event.key === 'ArrowLeft') {
       handlePreviousCard();
     } else if (event.key === ' ') {
-      setShowBack(!showBack);
+      handleFlip();
     }
   };
 
@@ -79,10 +86,19 @@ function Study() {
   if (loading) {
     return (
       <div className="study-container">
-        <div className="study-header-section">
-          <Typography className="study-header-title">
-            Loading...
-          </Typography>
+        <div className="study-background">
+          <div className="floating-cards">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="floating-card" style={{ '--delay': `${i * 2}s` }} />
+            ))}
+          </div>
+          <div className="gradient-overlay" />
+        </div>
+        <div className="study-content">
+          <div className="study-loading">
+            <div className="study-spinner"></div>
+            <Typography className="study-loading-text">Loading your deck...</Typography>
+          </div>
         </div>
       </div>
     );
@@ -91,17 +107,25 @@ function Study() {
   if (error || !deck) {
     return (
       <div className="study-container">
-        <div className="study-header-section">
-          <Typography className="study-header-title">
-            {error || 'Deck not found'}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => navigate('/')}
-            className="study-nav-button"
-          >
-            Back to Decks
-          </Button>
+        <div className="study-background">
+          <div className="floating-cards">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="floating-card" style={{ '--delay': `${i * 2}s` }} />
+            ))}
+          </div>
+          <div className="gradient-overlay" />
+        </div>
+        <div className="study-content">
+          <div className="study-error">
+            <Typography className="study-error-title">{error || 'Deck not found'}</Typography>
+            <Button
+              variant="contained"
+              onClick={() => navigate('/')}
+              className="study-back-button"
+            >
+              Back to Decks
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -111,53 +135,80 @@ function Study() {
 
   return (
     <div className="study-container">
-      <div className="study-header-section">
-        <Typography className="study-header-title">
-          {deck.title}
-        </Typography>
-      </div>
-
-      <div className="study-flashcard" onClick={() => setShowBack(!showBack)}>
-        <div className="study-card-content">
-          <Typography className="study-card-text">
-            {showBack ? currentCard.back : currentCard.front}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowBack(!showBack);
-            }}
-            className="study-flip-button"
-            startIcon={<FlipIcon />}
-          >
-            {showBack ? 'Show Front' : 'Show Back'}
-          </Button>
+      <div className="study-background">
+        <div className="floating-cards">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="floating-card" style={{ '--delay': `${i * 2}s` }} />
+          ))}
         </div>
+        <div className="gradient-overlay" />
       </div>
 
-      <div className="study-navigation-container">
-        <Button
-          variant="contained"
-          onClick={handlePreviousCard}
-          disabled={currentCardIndex === 0}
-          className="study-nav-button"
-          startIcon={<ArrowBackIcon />}
-        >
-          Previous
-        </Button>
-        <Typography className="study-progress-text">
-          Card {currentCardIndex + 1} of {deck.cards.length}
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={handleNextCard}
-          disabled={currentCardIndex === deck.cards.length - 1}
-          className="study-nav-button"
-          endIcon={<ArrowForwardIcon />}
-        >
-          Next
-        </Button>
+      <div className="study-content">
+        <Fade in={true} timeout={800}>
+          <div className="study-header-section">
+            <Typography className="study-header-title">
+              {deck.title}
+            </Typography>
+            <Typography className="study-progress-text">
+              Card {currentCardIndex + 1} of {deck.cards.length}
+            </Typography>
+          </div>
+        </Fade>
+
+        <Grow in={true} timeout={500}>
+          <div 
+            className={`study-flashcard ${showBack ? 'flipped' : ''} ${isFlipping ? 'flipping' : ''}`}
+            onClick={handleFlip}
+          >
+            <div className="study-card-content">
+              <Zoom in={!showBack} timeout={300}>
+                <Typography className="study-card-text">
+                  {currentCard.front}
+                </Typography>
+              </Zoom>
+              <Zoom in={showBack} timeout={300}>
+                <Typography className="study-card-text">
+                  {currentCard.back}
+                </Typography>
+              </Zoom>
+              <Button
+                variant="contained"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFlip();
+                }}
+                className="study-flip-button"
+                startIcon={<FlipIcon />}
+              >
+                {showBack ? 'Show Front' : 'Show Back'}
+              </Button>
+            </div>
+          </div>
+        </Grow>
+
+        <Fade in={true} timeout={800}>
+          <div className="study-navigation-container">
+            <Button
+              variant="contained"
+              onClick={handlePreviousCard}
+              disabled={currentCardIndex === 0}
+              className="study-nav-button"
+              startIcon={<ArrowBackIcon />}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleNextCard}
+              disabled={currentCardIndex === deck.cards.length - 1}
+              className="study-nav-button"
+              endIcon={<ArrowForwardIcon />}
+            >
+              Next
+            </Button>
+          </div>
+        </Fade>
       </div>
     </div>
   );
